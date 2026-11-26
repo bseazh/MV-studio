@@ -4,7 +4,30 @@
 
 遵循 [Agent Skills](https://skills.sh) 开放格式（`SKILL.md`），一条命令装上就能用。
 
-## 安装
+## 安装（三种方式，选一种）
+
+### 方式 A · 复制这段话发给你的 Agent，它自己装（推荐）
+
+不需要懂任何命令，把下面整段复制、粘贴给你正在用的 Agent（ZCode / Claude Code / Codex / Cursor……）发送即可：
+
+```text
+请帮我安装一个 agent skill，仓库：https://github.com/bseazh/MV-studio（skill 名叫 mv-prompt-studio）。
+
+按下面顺序尝试安装，哪一步成功就用哪一步：
+1. 如果本机有 npx（需要 Node.js ≥ 22.20）：运行 npx skills add bseazh/MV-studio -g
+2. 如果 npx 不可用或失败：git clone https://github.com/bseazh/MV-studio.git ~/.agents/skills/mv-prompt-studio
+3. 如果 git 也不行：从 https://github.com/bseazh/MV-studio/releases/latest 下载 mv-prompt-studio-v1.0.0.zip，
+   解压到 ~/.agents/skills/，解压后应存在 ~/.agents/skills/mv-prompt-studio/SKILL.md
+（如果你的 skills 目录不在 ~/.agents/skills，请换成你实际的 skills 目录，并告诉我最终装到了哪里）
+
+装完请做两件事：
+1. 读一遍 SKILL.md，用三句话告诉我这个 skill 能做什么、怎么触发
+2. 验证：对你说「帮我做个 MV：雨天便利店等人」，看它是否进入带推荐值的开场问答
+```
+
+Agent 会按 1→2→3 自动降级尝试，装完自我验证。
+
+### 方式 B · 自己跑一条命令
 
 > 前置要求：Node.js ≥ 22.20（CLI 用的是 [vercel-labs/skills](https://github.com/vercel-labs/skills)）
 
@@ -22,19 +45,27 @@ npx skills add bseazh/MV-studio -a claude-code
 npx skills add https://github.com/bseazh/MV-studio
 ```
 
-装完发生了什么：
+本仓库根目录就是一个完整的 skill 包（`SKILL.md` 在根），CLI 会把整个目录拷贝到目标位置的 `.agents/skills/mv-prompt-studio/`；生成 `skills-lock.json` 记录内容哈希，重复执行同一条命令即可更新。
 
-- 本仓库根目录就是一个完整的 skill 包（`SKILL.md` 在根），CLI 会把整个目录拷贝到目标位置的 `.agents/skills/mv-prompt-studio/`（`-g` 则装到全局 skills 目录）
-- 生成 `skills-lock.json` 记录内容哈希，方便后续比对更新；重复执行同一条命令即可更新
-- 本仓库只有一个 skill：`mv-prompt-studio`（名字取自 `SKILL.md` 的 frontmatter）
+### 方式 C · 下载压缩包手动装
 
-手动安装（不想用 CLI 时）：把仓库克隆到你的 agent skills 目录，保证 `SKILL.md` 在该目录根部即可：
+到 [Releases](https://github.com/bseazh/MV-studio/releases/latest) 下载 `mv-prompt-studio-v1.0.0.zip`（或用命令行）：
 
 ```bash
+# 下载最新 Release 的压缩包并解压到 skills 目录
+curl -L -o /tmp/mv-prompt-studio.zip \
+  https://github.com/bseazh/MV-studio/releases/latest/download/mv-prompt-studio-v1.0.0.zip
+unzip /tmp/mv-prompt-studio.zip -d ~/.agents/skills/
+
+# 或者不用压缩包，直接克隆仓库
 git clone https://github.com/bseazh/MV-studio.git ~/.agents/skills/mv-prompt-studio
 ```
 
-验证安装：对 agent 说「**帮我做个 MV，讲……**」或「**继续我的 MV**」，它会走开场问答。
+解压后是一个 `mv-prompt-studio/` 文件夹（含 `SKILL.md`、`references/`、`scripts/`、`使用说明.md`）。其他 agent 工具把 `~/.agents/skills/` 换成它对应的 skills 目录即可。
+
+### 验证安装（方式 B / C 装完看这里）
+
+对 agent 说「**帮我做个 MV，讲……**」或「**继续我的 MV**」，它会走开场问答——时长可自由指定（推荐 1 分钟左右），说明装的是最新版。
 
 ## 它解决什么问题
 
